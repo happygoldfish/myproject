@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Delete Post
+{% endblock %}
+
+{% block content %}
+    <h1>Delete Post {{ post.title }}</h1>
+    <form class="form-with-validation" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete this post?</p>
+        <br>     
+        <button class="form-submit">Delete Post</button>
+    </form>
+{% endblock %}

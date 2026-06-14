@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block content %}
+    <section>
+        <img class="banner" src="{{ post.banner.url}}" alt="{{ post.title }} banner image">
+        <h1>{{ post.title }}</h1>
+        <p>{{ post.date_created }}</p>
+        <p>{{ post.body }}</p>
+    </section>
+    {% if user == post.author %}
+        <p><a href="{% url 'posts:post-edit' slug=post.slug %}">Edit Post</a> |
+        <a href="{% url 'posts:post-delete' slug=post.slug %}">Delete Post</a></p>
+    {% endif %}
+    <br/>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.body }}
+        <button type="Submit">Post Comment</button>
+    </form>
+    {% for comment in comments %}
+        <p><img src="{{ comment.user.profile.profile_image.url }}" width="30" height="30"></p>
+        <p>{{ comment.user }}</p>
+        <p>{{ comment.date }}</p>
+        <p>{{comment.body }}</p>
+        {% if request.user == comment.user %}
+            <p><a href="{% url 'posts:commentDelete' pk=comment.pk %}">Delete Comment</a></p>
+        {% endif %}
+        
+        </p>
+        <br/>
+    {% endfor %}
+{% endblock %}

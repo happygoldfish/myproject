@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    {{ user.username }}s Posts
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h1>Posts</h1>
+    {% for post in posts %}
+            
+                
+            {% if post.author == request.user %}
+             <article class="post">
+                {% if post.banner %}
+                    <img src="{{ post.banner.url }}" height="100px" width="100px" default="/media/default_img.jpg">
+                {% else %}
+                    <img src="/media/default_img.jpg" height="100px" width="100px">
+                {% endif %}
+                <h2>
+                    <a href="{% url 'posts:page' slug=post.slug %}">
+                    {{ post.title }}
+                    </a>
+                </h2>
+            <p>{{ post.date_created }} by {{ post.author }}</p>
+            <p>{{ post.body }}</p>
+            
+                {% if user == post.author %}
+                    <p><a href="{% url 'posts:post-edit' slug=post.slug %}">Edit Post</a> |
+                    <a href="{% url 'posts:post-delete' slug=post.slug %}">Delete Post</a></p>
+                {% endif %}
+            
+            </article>
+            {% endif %}
+    {% endfor %}
+{% endblock %}

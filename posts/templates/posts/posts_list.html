@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h1>Posts</h1>
+    {% for post in posts %}
+        <article class="post">
+            <h2>
+                <img src="{{ post.banner.url }}" height="100px" width="100px">
+                <a href="{% url 'posts:page' slug=post.slug %}">
+                    {{ post.title }}
+                </a>
+            </h2>
+            <p>{{ post.date_created }} by {{ post.author }}</p>
+            <p>{{ post.body }}</p>
+        </article>
+        {% if user == post.author %}
+                    <p><a href="{% url 'posts:post-edit' slug=post.slug %}">Edit Post</a> |
+                    <a href="{% url 'posts:post-delete' slug=post.slug %}">Delete Post</a></p>
+        {% endif %}
+        
+    {% endfor %}
+{% endblock %}
