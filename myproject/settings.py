@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'sv-se'
 
-TIME_ZONE = 'CET'
+TIME_ZONE = 'Europe/Stockholm'
 
 USE_I18N = True
 
