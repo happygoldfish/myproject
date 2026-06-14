@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    Users
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h1>Users</h1>
+        {% for profile in profiles %}
+        <article class="user">
+            <p>
+                <img class="profile-picture" src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s avatar">
+                <p>{{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+                <a href="{% url 'users:profile' profile.user.pk %}">
+                    {{ profile.user.username }}</a>
+                    <p>Last modified: {{ profile.date_modified }}</p>
+                    <p>UserPK: {{ profile.user.id }}</p>
+                    <p>ProfilePK: {{ profile.user.profile.id }}</p>
+                </p>
+        </article>
+    {% endfor %}
+    </section>
+{% endblock %}

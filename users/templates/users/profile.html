@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    User Profile
+{% endblock %}
+
+{% block content %}
+
+{% if request.user == profile.user %}
+    <p><a href="{% url 'users:edit_profile' user.id %}">Edit User profile</a></p>
+{% else %}
+    <p></p>
+{% endif %}
+<br/>
+{% if profile %}
+    <img class="profile-picture" src="{{ profile.profile_image.url }}" alt="{{ user.username }}'s avatar"  >
+    <h1>{{ profile.user.username }}'s User Profile</h1>
+    <p>Username: {{ profile.user.username }}</p>
+    <p>Email: {{ profile.user.email }}</p>
+    <p>First Name: {{ profile.user.first_name }}</p>
+    <p>Last Name: {{ profile.user.last_name }}</p>
+    <p>Bio: {{ profile.bio }}</p>
+    <br/>
+    <p>Follows:<br/>
+        {% for following in profile.follows.all %}
+            <a href="{% url 'users:profile' following.user.id %}">@{{ following }}</a><br/>
+
+        {% endfor %}</p><br/>
+    <p>Followed by:<br/>
+        {% for following in profile.followed_by.all %}
+            <a href="{% url 'users:profile' following.user.id %}">@{{ following }}</a><br/>
+        {% endfor %}</p>
+        <p>
+            <form method="POST">
+                {% csrf_token %}
+                {% if profile in user.profile.follows.all %}
+                <button name="follow" value="unfollow" type="Submit">Unfollow @{{ profile.user.username }}</button>
+                {% else %}
+                <button name="follow" value="follow" type="Submit">Follow @{{ profile.user.username }}</button>
+                {% endif %}
+            </form>
+        </p>
+        {% if request.user == profile.user %}
+            <p><a href="{% url 'posts:my-posts' %}"> My Posts </a></p>
+            
+        {% else %}
+            <!-- upgrade to current user's posts -->
+            <p><a href="{% url 'posts:list' %}">All posts</a></p>
+        {% endif %}
+        
+{% endif %}
+
+{% endblock %}
