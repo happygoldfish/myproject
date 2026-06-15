@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
@@ -13,9 +12,9 @@ class User(AbstractUser):
      email = models.EmailField()
      date_created = models.DateTimeField(auto_now_add=True)
      class Meta:
-         db_table = 'auth_user'
+          db_table = 'auth_user'
      def __str__(self):
-         return self.username
+          return self.username
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -25,7 +24,7 @@ class Profile(models.Model):
         blank=True)
     profile_image = models.ImageField(blank=True, null=True, upload_to='profile/', default="default_img.jpg")
     bio = models.TextField(max_length=200)
-    date_modified = models.DateTimeField(User, auto_now=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user.username
