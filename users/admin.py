@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Profile, User
 from django.contrib.auth.models import Group
-from django.contrib.auth.models import User as StandardUser
 
 
 
@@ -20,6 +19,5 @@ class UserAdmin(admin.ModelAdmin):
     inlines = [ProfileInline]
 
 
-#unregister the default User admin and register the new UserAdmin
-#admin.site.unregister(StandardUser)
+#Register the custom User admin
 admin.site.register(User, UserAdmin)
