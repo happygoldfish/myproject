@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Profile, User
 from django.contrib.auth.models import Group
-from django.contrib.auth.models import User as StandardUser
+#from .models import User as StandardUser
 
 
 
