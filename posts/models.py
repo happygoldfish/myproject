@@ -1,15 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings  
 
 # Create your models here.
 
-#mediaType_Choices = (
-#    ('na', 'NA'),
-#    ('cd', 'CD'),
-#    ('lp', 'LP'),
-#    ('ep', 'EP'),
-#)
 
 class Post(models.Model):
     title = models.CharField(max_length=75)
