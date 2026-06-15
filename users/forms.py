@@ -1,6 +1,12 @@
 from django import forms
 from .models import User, Profile
-from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm, UserCreationForm as DjangoUserCreationForm
+
+class UserCreationForm(DjangoUserCreationForm):
+    """Custom UserCreationForm that uses the custom User model"""
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
 
 class profileForm(forms.ModelForm):
     username = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))

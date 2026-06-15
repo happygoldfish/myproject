@@ -2,12 +2,12 @@ from pyexpat.errors import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from users.models import Profile
 from . import forms
-from .forms import EditUserForm, EditProfileForm
+from .forms import EditUserForm, EditProfileForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, get_user_model
 #from django.contrib.auth.models import User
@@ -167,9 +167,9 @@ def edit_profile(request, pk):
 #    
 #    def get_object(self):
 #        return self.request.user
-    
-    #def form_valid(self, form):
-    #    return super().form_valid(form) 
-    
-    
-       
+     
+     #def form_valid(self, form):
+     #    return super().form_valid(form) 
+     
+     
+        
