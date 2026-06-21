@@ -12,7 +12,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            # 2. Installera beroenden 
+            # 2. Installera Python-beroenden 
             - name: Install dependencies
               run: |
                 python -m pip install --upgrade pip
@@ -34,38 +34,35 @@ jobs:
               run: |
                 pytest -v
 
-            # 5. Kör dina frontend- och BDD-tester
+            # 5. Installera npm-paket
+            - name: Install npm packages
+              run: |
+                npm install --include=dev
+
+            # 6. Installera Playwright via GitHubs officiella Action (Fixar felen)
+            - name: Install Playwright Browsers
+              uses: microsoft/playwright-actions@v1
+
+            # 7. Starta backend och kör testerna
             - name: Run npm test
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
-                # Lägg till hemkatalogen för node i projektmappen så Playwright har full skrivrättighet
-                PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
               run: |
-                # 1. Installera grundpaketen
-                npm install --include=dev
-                
-                # 2. Tvinga installation av Playwright-kärnan så att filerna hittas på rätt sökväg
-                npm install --no-save @playwright/test playwright
-                
-                # 3. Sätt rättigheter direkt på binärerna
+                # Sätt rättigheter på lokala node_modules direkt
                 chmod -R +x ./node_modules/.bin/
                 
-                # 4. Installera webbläsarna via den lokala binären
-                ./node_modules/.bin/playwright install chromium
-                chmod -R +x $PLAYWRIGHT_BROWSERS_PATH
-                
-                # 5. Starta Django i bakgrunden
+                # Starta Django i bakgrunden
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
                 
-                # 6. Vänta tills servern svarar
+                # Vänta tills servern svarar
                 sleep 5
                 
-                # 7. Kör dina BDD-tester
+                # Kör testerna
                 npm test
                 
-                # 8. Spara resultat och rensa processen
+                # Spara resultat och rensa processen
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
                 exit $TEST_EXIT_CODE
