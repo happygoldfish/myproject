@@ -48,10 +48,12 @@ jobs:
             # 7. Installera npm-paket och Playwright-webbläsare
             - name: Install npm & Playwright
               run: |
-                # --unsafe-perm tvingar npm att sätta korrekta rättigheter på binärer under installationen
-                npm install --include=dev --unsafe-perm
+                npm install --include=dev
                 npx playwright install chromium --with-deps
-
+                # Ensure all executables have proper permissions
+                chmod -R +x ./node_modules/.bin/
+                chmod -R +x ./node_modules/playwright/lib/
+                find ./node_modules -type f -name "*.node" -exec chmod +x {} +
             # 8. Starta backend och kör dina frontend BDD-tester
             - name: Run npm test
               env:
@@ -59,21 +61,16 @@ jobs:
                 PYTHONUNBUFFERED: 1
                 PATH: ${{ github.workspace }}/node_modules/.bin:${{ env.PATH }}
               run: |
-                # Fixa rättigheter på ALLA dolda filer inuti Playwright- och BDD-paketen
-                chmod -R +x ./node_modules/.bin/
-                find ./node_modules/playwright -type f \( -name "*.sh" -o -name "playwright" -o -executable \) -exec chmod +x {} +
-                find ./node_modules/playwright-bdd -type f -exec chmod +x {} +
-                
                 # Starta Django i bakgrunden
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
-                
+    
                 # Vänta 5 sekunder tills servern är redo att ta emot anrop
                 sleep 5
-                
+    
                 # Kör dina BDD-tester
                 npm test
-                
+    
                 # Spara resultat och stäng ner processen rent
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
