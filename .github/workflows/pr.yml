@@ -61,7 +61,7 @@ jobs:
               run: |
                 # Fixa rättigheter på ALLA dolda filer inuti Playwright- och BDD-paketen
                 chmod -R +x ./node_modules/.bin/
-                find ./node_modules/playwright -type f -name "*.sh" -exec chmod +x {} +
+                find ./node_modules/playwright -type f \( -name "*.sh" -o -name "playwright" -o -executable \) -exec chmod +x {} +
                 find ./node_modules/playwright-bdd -type f -exec chmod +x {} +
                 
                 # Starta Django i bakgrunden
