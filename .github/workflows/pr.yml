@@ -60,9 +60,6 @@ jobs:
             - name: Set up environment for postman tests
               run: |
                 npm install -g postman-cli
-                npm --version
-                where postman
-                postman --version
             
             - name: Run postman tests 
               run: |
