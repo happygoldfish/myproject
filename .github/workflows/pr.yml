@@ -7,29 +7,24 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            # 1. Hämta koden från ditt GitHub-repository
             - name: Checkout code
               uses: actions/checkout@v4
 
-            # 2. Sätt upp Python 3.14 på Ubuntu-maskinen
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
                 python-version: '3.14'
 
-            # 3. Sätt upp Node.js 24 på Ubuntu-maskinen
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
                 node-version: '24'
 
-            # 4. Installera Python-beroenden
             - name: Install Python dependencies
               run: |
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
 
-            # 5. Kör Django-migrationerna för att skapa SQLite-databasen
             - name: Run Database Migrations
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
@@ -37,7 +32,6 @@ jobs:
               run: |
                 python manage.py migrate
 
-            # 6. Kör dina Python-kvalitetstester
             - name: Run pyTest
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
@@ -45,33 +39,24 @@ jobs:
               run: |
                 pytest -v
 
-            # 7. Installera npm-paket och Playwright-webbläsare
-            - name: Install npm & Playwright
-              run: |
-                npm install --include=dev
-                npx playwright install chromium --with-deps
-                # Ensure all executables have proper permissions
-                chmod -R +x ./node_modules/.bin/
-                chmod -R +x ./node_modules/playwright/lib/
-                find ./node_modules -type f -name "*.node" -exec chmod +x {} +
-            # 8. Starta backend och kör dina frontend BDD-tester
+            # Install Node dependencies FIRST
+            - name: Install npm dependencies
+              run: npm install --include=dev
+
+            # Install Playwright with system dependencies
+            - name: Install Playwright browsers
+              run: npx playwright install --with-deps
+
+            # Then run tests
             - name: Run npm test
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
-                PATH: ${{ github.workspace }}/node_modules/.bin:${{ env.PATH }}
               run: |
-                # Starta Django i bakgrunden
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
-    
-                # Vänta 5 sekunder tills servern är redo att ta emot anrop
                 sleep 5
-    
-                # Kör dina BDD-tester
                 npm test
-    
-                # Spara resultat och stäng ner processen rent
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
                 exit $TEST_EXIT_CODE
