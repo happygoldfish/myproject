@@ -8,17 +8,14 @@ jobs:
         container: nikolaik/python-nodejs:python3.14-nodejs24
 
         steps:
-            # 1. Hämta koden från ditt GitHub-repository
             - name: Checkout code
               uses: actions/checkout@v4
 
-            # 2. Installera beroenden 
             - name: Install dependencies
               run: |
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
 
-            # 3. Kör Django-migrationerna för att skapa SQLite-databasen
             - name: Run Database Migrations
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
@@ -26,7 +23,6 @@ jobs:
               run: |
                 python manage.py migrate
 
-            # 4. Kör dina kvalitetstester
             - name: Run pyTest
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
@@ -39,7 +35,7 @@ jobs:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
               run: |
-                npm install
+                npm ci
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
                 sleep 10  
@@ -53,6 +49,5 @@ jobs:
                 npm test
                 TEST_EXIT_CODE=$?
 
-# Stäng av Django-servern och avsluta skriptet med testernas status
 kill $DJANGO_PID
 exit $TEST_EXIT_CODE
