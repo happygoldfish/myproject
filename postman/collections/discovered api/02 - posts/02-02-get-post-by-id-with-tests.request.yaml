@@ -1,5 +1,4 @@
 $kind: http-request
-name: 'Get Post by ID'
 method: GET
 url: '{{baseUrl}}/posts/api/{{postId}}'
 order: 1000
