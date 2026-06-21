@@ -48,7 +48,8 @@ jobs:
             # 7. Installera npm-paket och Playwright-webbläsare
             - name: Install npm & Playwright
               run: |
-                npm install --include=dev
+                # --unsafe-perm tvingar npm att sätta korrekta rättigheter på binärer under installationen
+                npm install --include=dev --unsafe-perm
                 npx playwright install chromium --with-deps
 
             # 8. Starta backend och kör dina frontend BDD-tester
@@ -56,11 +57,12 @@ jobs:
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
-                # ÄNDRING: Tvinga Linux att hitta Playwright/BDD-gen i de lokala nodemodulerna
                 PATH: ${{ github.workspace }}/node_modules/.bin:${{ env.PATH }}
               run: |
-                # Ge explicita körrättigheter till alla binärer i .bin-mappen innan körning
+                # Fixa rättigheter på ALLA dolda filer inuti Playwright- och BDD-paketen
                 chmod -R +x ./node_modules/.bin/
+                find ./node_modules/playwright -type f -name "*.sh" -exec chmod +x {} +
+                find ./node_modules/playwright-bdd -type f -exec chmod +x {} +
                 
                 # Starta Django i bakgrunden
                 python manage.py runserver 0.0.0.0:8000 &
