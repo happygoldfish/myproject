@@ -39,15 +39,12 @@ jobs:
               run: |
                 pytest -v
 
-            # Install Node dependencies FIRST
             - name: Install npm dependencies
               run: npm install --include=dev
 
-            # Install Playwright with system dependencies
             - name: Install Playwright browsers
               run: npx playwright install --with-deps
 
-            # Then run tests
             - name: Run npm test
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
