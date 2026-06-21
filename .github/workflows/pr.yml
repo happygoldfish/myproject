@@ -33,25 +33,36 @@ jobs:
                 PYTHONUNBUFFERED: 1
               run: |
                 pytest -v
-            - name: Install Node inside container
-              run: |
-                curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-                apt-get update && apt-get install -y nodejs build-essential   
+
+            # 5. Kör dina frontend- och BDD-tester
             - name: Run npm test
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
+                # Lägg till hemkatalogen för node i projektmappen så Playwright har full skrivrättighet
                 PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
               run: |
+                # Installera paket och tvinga lokala binärer
                 npm install --include=dev
-                npx playwright install --with-deps
-                sleep 10
+                
+                # Sätt rättigheter på lokala node_modules direkt efter installation
+                chmod -R +x ./node_modules/.bin/
+                
+                # Installera Playwrights webbläsare direkt i din godkända arbetsmapp
+                npx playwright install chromium --with-deps
+                chmod -R +x $PLAYWRIGHT_BROWSERS_PATH
+                
+                # Starta Django i bakgrunden
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
+                
+                # Vänta tills servern svarar
                 sleep 5
-                chmod -R +x ./node_modules/.bin/
-                chmod -R +x $PLAYWRIGHT_BROWSERS_PATH
-                npm test
+                
+                # Kör testerna via npx så att Playwright-binären ärver rätt miljö
+                npx npm test
+                
+                # Spara resultat och rensa processen
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
                 exit $TEST_EXIT_CODE
