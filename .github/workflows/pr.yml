@@ -52,7 +52,8 @@ jobs:
                 npm install --include=dev
                 # Detta installerar Chromium och alla Linux-bibliotek som behövs
                 chmod -R +x node_modules/.bin/
-                npx playwright install chromium --with-deps
+                # npx playwright install chromium --with-deps
+                ./node_modules/.bin/playwright install chromium --with-deps
 
             # Starta backend och kör dina frontend BDD-tester
             - name: Run npm test
