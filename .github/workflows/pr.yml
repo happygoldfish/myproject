@@ -5,21 +5,20 @@ jobs:
     quality-assurance:
         name: Quality Assurance
         runs-on: ubuntu-latest
-        # ÄNDRING: Vi har tagit bort "container:"-raden. Vi kör direkt på Ubuntu 
-        # och installerar rätt versioner av Python och Node via officiella verktyg.
+        
 
         steps:
-            # 1. Hämta koden från ditt GitHub-repository
+            # Hämta koden från GitHub
             - name: Checkout code
               uses: actions/checkout@v4
 
-            # 2. Sätt upp Python 3.14 på Ubuntu-maskinen
+            # Sätt upp Python 3.14 på en Ubuntu-maskin
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
                 python-version: '3.14'
 
-            # 3. Sätt upp Node.js 24 på Ubuntu-maskinen
+            # Sätt upp Node.js 24 på samma Ubuntu-maskin
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
@@ -51,7 +50,7 @@ jobs:
             - name: Install npm & Playwright
               run: |
                 npm install --include=dev
-                # Detta installerar Chromium och alla Linux-bibliotek som behövs utan rättighetsproblem
+                # Detta installerar Chromium och alla Linux-bibliotek som behövs
                 npx playwright install chromium --with-deps
 
             # 8. Starta backend och kör dina frontend BDD-tester
@@ -60,17 +59,9 @@ jobs:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
               run: |
-                # Starta Django i bakgrunden
-                python manage.py runserver 0.0.0.0:8000 &
-                DJANGO_PID=$!
-                
+                # Starta applikationen i bakgrunden
+                # python manage.py runserver 0.0.0.0:8000 &
                 # Vänta 5 sekunder tills servern är redo att ta emot anrop
                 sleep 5
-                
-                # Kör dina BDD-tester
+                # Kör tester
                 npm test
-                
-                # Spara resultat och stäng ner processen rent
-                TEST_EXIT_CODE=$?
-                kill $DJANGO_PID
-                exit $TEST_EXIT_CODE
