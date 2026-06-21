@@ -41,7 +41,7 @@ jobs:
 
             # 6. Installera Playwright via GitHubs officiella Action (Fixar felen)
             - name: Install Playwright Browsers
-              uses: microsoft/playwright-actions@v1
+              uses: microsoft/playwright@v1
 
             # 7. Starta backend och kör testerna
             - name: Run npm test
