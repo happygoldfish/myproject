@@ -5,20 +5,33 @@ jobs:
     quality-assurance:
         name: Quality Assurance
         runs-on: ubuntu-latest
-        container: nikolaik/python-nodejs:python3.14-nodejs24
+        # ÄNDRING: Vi har tagit bort "container:"-raden. Vi kör direkt på Ubuntu 
+        # och installerar rätt versioner av Python och Node via officiella verktyg.
 
         steps:
             # 1. Hämta koden från ditt GitHub-repository
             - name: Checkout code
               uses: actions/checkout@v4
 
-            # 2. Installera Python-beroenden 
-            - name: Install dependencies
+            # 2. Sätt upp Python 3.14 på Ubuntu-maskinen
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.14'
+
+            # 3. Sätt upp Node.js 24 på Ubuntu-maskinen
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: '24'
+
+            # 4. Installera Python-beroenden
+            - name: Install Python dependencies
               run: |
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
 
-            # 3. Kör Django-migrationerna för att skapa SQLite-databasen
+            # 5. Kör Django-migrationerna för att skapa SQLite-databasen
             - name: Run Database Migrations
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
@@ -26,7 +39,7 @@ jobs:
               run: |
                 python manage.py migrate
 
-            # 4. Kör dina kvalitetstester
+            # 6. Kör dina Python-kvalitetstester
             - name: Run pyTest
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
@@ -34,35 +47,30 @@ jobs:
               run: |
                 pytest -v
 
-            # 5. Installera npm-paket
-            - name: Install npm packages
+            # 7. Installera npm-paket och Playwright-webbläsare
+            - name: Install npm & Playwright
               run: |
                 npm install --include=dev
+                # Detta installerar Chromium och alla Linux-bibliotek som behövs utan rättighetsproblem
+                npx playwright install chromium --with-deps
 
-            # 6. Installera Playwright via GitHubs officiella Action (Fixar felen)
-            - name: Install Playwright Browsers
-              uses: microsoft/playwright@v1
-
-            # 7. Starta backend och kör testerna
+            # 8. Starta backend och kör dina frontend BDD-tester
             - name: Run npm test
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
               run: |
-                # Sätt rättigheter på lokala node_modules direkt
-                chmod -R +x ./node_modules/.bin/
-                
                 # Starta Django i bakgrunden
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
                 
-                # Vänta tills servern svarar
+                # Vänta 5 sekunder tills servern är redo att ta emot anrop
                 sleep 5
                 
-                # Kör testerna
+                # Kör dina BDD-tester
                 npm test
                 
-                # Spara resultat och rensa processen
+                # Spara resultat och stäng ner processen rent
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
                 exit $TEST_EXIT_CODE
