@@ -47,7 +47,7 @@ jobs:
                 py .\manage.py runserver 127.0.0.1:8000 &
                 DJANGO_PID=$!
                 sleep 5
-                npm test
+                npx npm test
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
                 exit $TEST_EXIT_CODE
