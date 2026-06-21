@@ -44,10 +44,11 @@ jobs:
               run: |
                 npm install
                 sleep 10
-                py .\manage.py runserver 127.0.0.1:8000 &
+                python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
                 sleep 5
-                npx npm test
+                chmod -R +x ./node_modules/.bin/
+                npm test
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
                 exit $TEST_EXIT_CODE
