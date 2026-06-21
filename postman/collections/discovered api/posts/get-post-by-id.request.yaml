@@ -1,0 +1,4 @@
+$kind: http-request
+method: GET
+url: '{{baseUrl}}/posts/api/{{postId}}'
+order: 1000

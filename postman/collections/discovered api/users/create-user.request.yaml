@@ -1,0 +1,17 @@
+$kind: http-request
+method: POST
+url: '{{baseUrl}}/users/api/create'
+order: 5000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "newuser",
+      "first_name": "New",
+      "last_name": "User",
+      "email": "newuser@example.com",
+      "password": "ChangeMe123!"
+    }

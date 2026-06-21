@@ -1,0 +1,9 @@
+$kind: collection
+name: 'Discovered API'
+variables:
+  - key: baseUrl
+    value: 'http://127.0.0.1:8000'
+  - key: postId
+    value: '1'
+  - key: userId
+    value: '1'

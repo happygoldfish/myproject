@@ -1,0 +1,17 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/posts/api/{{postId}}'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Updated post",
+      "body": "Updated from Postman",
+      "slug": "updated-post",
+      "date_released": "2026-06-21T00:00:00Z",
+      "author": 1
+    }
