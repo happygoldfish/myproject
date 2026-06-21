@@ -42,7 +42,8 @@ jobs:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
               run: |
-                npm install
+                npm install --include=dev
+                npx playwright install --with-deps
                 sleep 10
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
