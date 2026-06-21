@@ -42,27 +42,30 @@ jobs:
                 # Lägg till hemkatalogen för node i projektmappen så Playwright har full skrivrättighet
                 PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
               run: |
-                # Installera paket och tvinga lokala binärer
+                # 1. Installera grundpaketen
                 npm install --include=dev
                 
-                # Sätt rättigheter på lokala node_modules direkt efter installation
+                # 2. Tvinga installation av Playwright-kärnan så att filerna hittas på rätt sökväg
+                npm install --no-save @playwright/test playwright
+                
+                # 3. Sätt rättigheter direkt på binärerna
                 chmod -R +x ./node_modules/.bin/
                 
-                # Installera Playwrights webbläsare direkt i din godkända arbetsmapp
-                npx playwright install chromium --with-deps
+                # 4. Installera webbläsarna via den lokala binären
+                ./node_modules/.bin/playwright install chromium
                 chmod -R +x $PLAYWRIGHT_BROWSERS_PATH
                 
-                # Starta Django i bakgrunden
+                # 5. Starta Django i bakgrunden
                 python manage.py runserver 0.0.0.0:8000 &
                 DJANGO_PID=$!
                 
-                # Vänta tills servern svarar
+                # 6. Vänta tills servern svarar
                 sleep 5
                 
-                # Kör testerna via npx så att Playwright-binären ärver rätt miljö
-                npx npm test
+                # 7. Kör dina BDD-tester
+                npm test
                 
-                # Spara resultat och rensa processen
+                # 8. Spara resultat och rensa processen
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
                 exit $TEST_EXIT_CODE
