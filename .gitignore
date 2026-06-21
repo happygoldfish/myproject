@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+#test-results
+test-results/
+test-results/*
+test-results/.last-run.json
+
+#playwright
+playwright-report/
+playwright-report/*
