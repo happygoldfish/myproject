@@ -15,3 +15,22 @@ body:
       "email": "newuser@example.com",
       "password": "ChangeMe123!"
     }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200 or 201', function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+
+      pm.test('Response is JSON', function () {
+        pm.response.to.be.json;
+      });
+
+      const data = pm.response.json();
+
+      pm.test('Response is an object or array', function () {
+        pm.expect(data).to.satisfy(function (value) {
+          return value !== null && (Array.isArray(value) || typeof value === 'object');
+        });
+      });

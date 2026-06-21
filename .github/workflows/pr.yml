@@ -52,12 +52,15 @@ jobs:
                 PYTHONUNBUFFERED: 1
               run: |
                 python manage.py runserver 0.0.0.0:8000 &
-                DJANGO_PID=$!
-                
+                #wait for software to start
                 sleep 5
-                
+                #run tests
                 npm test
-                
-                TEST_EXIT_CODE=$?
-                kill $DJANGO_PID
-                exit $TEST_EXIT_CODE
+
+            - name: Set up environment for postman tests
+              run: |
+                npm install -g postman-cli
+            
+            - name: Run postman tests 
+              run: |
+                postman collection run "postman/collections/discovered api"

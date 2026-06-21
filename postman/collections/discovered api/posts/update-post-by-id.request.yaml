@@ -15,3 +15,20 @@ body:
       "date_released": "2026-06-21T00:00:00Z",
       "author": 1
     }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test('Response is JSON', function () {
+        pm.response.to.be.json;
+      });
+
+      const data = pm.response.json();
+
+      pm.test('Response is an object', function () {
+        pm.expect(data).to.be.an('object');
+      });

@@ -15,3 +15,20 @@ body:
       "email": "updateduser@example.com",
       "password": "ChangeMe123!"
     }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test('Response is JSON', function () {
+        pm.response.to.be.json;
+      });
+
+      const data = pm.response.json();
+
+      pm.test('Response is an object', function () {
+        pm.expect(data).to.be.an('object');
+      });

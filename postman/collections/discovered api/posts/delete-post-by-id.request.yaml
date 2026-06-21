@@ -2,3 +2,10 @@ $kind: http-request
 method: DELETE
 url: '{{baseUrl}}/posts/api/{{postId}}'
 order: 3000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200, 202, or 204', function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);
+      });

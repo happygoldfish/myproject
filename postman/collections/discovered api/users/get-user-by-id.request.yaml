@@ -2,3 +2,24 @@ $kind: http-request
 method: GET
 url: '{{baseUrl}}/users/api/{{userId}}'
 order: 7000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test('Response is JSON', function () {
+        pm.response.to.be.json;
+      });
+
+      const data = pm.response.json();
+
+      pm.test('Response is an object', function () {
+        pm.expect(data).to.be.an('object');
+      });
+
+      pm.test('Response has an id', function () {
+        pm.expect(data).to.have.property('id');
+      });
