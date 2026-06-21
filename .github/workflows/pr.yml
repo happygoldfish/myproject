@@ -41,6 +41,7 @@ jobs:
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
+                PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
               run: |
                 npm install --include=dev
                 npx playwright install --with-deps
@@ -49,6 +50,7 @@ jobs:
                 DJANGO_PID=$!
                 sleep 5
                 chmod -R +x ./node_modules/.bin/
+                chmod -R +x $PLAYWRIGHT_BROWSERS_PATH
                 npm test
                 TEST_EXIT_CODE=$?
                 kill $DJANGO_PID
