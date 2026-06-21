@@ -1,15 +1,18 @@
 name: Quality Assurance
-on: [pull_request, workflow_call]
+on:
+  push:
+    branches: ["main", "TestForCI"]
+  pull_request:
+    branches: ["main", "TestForCI"]
 
 jobs:
     quality-assurance:
         name: Quality Assurance
         runs-on: ubuntu-latest
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
-
+              
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
@@ -41,8 +44,7 @@ jobs:
 
             - name: Install npm & Playwright
               run: |
-                npm install --include=dev
-                npx playwright install chromium --with-deps
+                npm ci && npx playwright install
 
             - name: Run npm test
               env:
