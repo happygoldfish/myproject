@@ -1,5 +1,9 @@
 name: Quality Assurance
-on: [pull_request, workflow_call]
+on:
+  push:
+    branches: ["main", "TestForCI"]
+  pull_request:
+    branches: ["main", "TestForCI"]
 
 jobs:
     quality-assurance:
@@ -52,18 +56,23 @@ jobs:
                 npm install --include=dev
                 # Detta installerar Chromium och alla Linux-bibliotek som behövs
                 chmod -R +x node_modules/.bin/
-                # npx playwright install chromium --with-deps
-                ./node_modules/.bin/playwright install chromium --with-deps
+                npm ci && npx playwright install
 
             # Starta backend och kör dina frontend BDD-tester
-            - name: Run npm test
+            - name: Run software
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
               run: |
                 # Starta applikationen i bakgrunden
-                # python manage.py runserver 0.0.0.0:8000 &
+                python manage.py runserver 0.0.0.0:8000 &
                 # Vänta 5 sekunder tills servern är redo att ta emot anrop
                 sleep 5
+                echo "Software started"
+            - name: Run npm test
+              env:
+                PYTHONDONOTWRITEBYTECODE: 1
+                PYTHONUNBUFFERED: 1
+              run: |
                 # Kör tester
                 npm test
