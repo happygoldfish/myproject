@@ -17,5 +17,6 @@ urlpatterns = [
     path('<slug:slug>/edit/', login_required(views.UpdatePostView.as_view()), name='post-edit'),
     path('<slug:slug>/delete/', login_required(views.DeletePostView.as_view()), name='post-delete'),
     path('api/<int:pk>', views.post_detail, name='post_detail'),
+    path('api/create', views.create_post, name='create_post'),
     path('comment/delete/<pk>', views.commentDeleteView, name='commentDelete'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   

@@ -44,7 +44,7 @@ jobs:
 
             - name: Install npm & Playwright
               run: |
-                npm ci && npx playwright install
+                npm ci && npx playwright install --with-deps
 
             - name: Run npm test
               env:
