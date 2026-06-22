@@ -21,36 +21,21 @@ definition:
   steps:
     - name: "Create New User"
       path: "01-users/01-01-create-user.request.yaml"
-
     - name: "Get User By ID"
       path: "01-users/01-02-get-user-by-id.request.yaml"
-      
     - name: "Get User list"
       path: "01-users/01-03-list-users.request.yaml"
-
     - name: "Get Users"
       path: "01-users/01-04-get-users.request.yaml"
-
     - name: "Update User By ID"
       path: "01-users/01-05-update-user-by-id.request.yaml"
-
-# Post segment starts here
-
     - name: "Create Post"
       path: "02-posts/02-01-create-post.request.yaml"
-
     - name: "Get Post By ID"
       path: "02-posts/02-02-get-post-by-id.request.yaml"
-
-        # User Test number 3 was removed
-
     - name: "Update Post By ID"
       path: "02-posts/02-04-update-post-by-id.request.yaml"
-
-# Cleanup
-
     - name: "Remove Post By ID"
       path: "03-cleanup/03-01-delete-post-by-id.request.yaml"
-    
     - name: "Remove User By ID"
       path: "03-cleanup/03-02-delete-user-by-id.request.yaml"
