@@ -15,6 +15,9 @@ variables:
     value: "UserName"
   - key: newUserPass
     value: "newUserPass"
+  - key: newUserEmail
+    value: "NotAReal@mail.com"
+
 
 # Explicit execution steps defined sequentially from top to bottom
 steps:
