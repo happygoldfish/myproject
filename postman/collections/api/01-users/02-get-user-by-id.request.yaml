@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/users/api/{{userId}}"
+url: "{{baseUrl}}/users/api/{{userId}}?format=json"
 method: GET
 scripts:
   - type: afterResponse
