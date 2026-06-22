@@ -9,11 +9,11 @@ body:
   type: json
   content: |-
     {
-      "username": "newuser",
-      "first_name": "New",
-      "last_name": "User",
-      "email": "newuser@example.com",
-      "password": "ChangeMe123!"
+      "username": "{{newUser}}",
+      "first_name": "{{newUserName}}",
+      "last_name": "{{newUserLName}}",
+      "email": "{{newUserEmail}}",
+      "password": "{{newUserPass}}"
     }
 scripts:
   - type: afterResponse
