@@ -63,4 +63,4 @@ jobs:
             
             - name: Run postman tests 
               run: |
-                postman collection run "postman/collections/discovered api"
+                postman collection run "postman/collections/api"
