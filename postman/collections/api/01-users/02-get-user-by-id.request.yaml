@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/users/api/{{userId}}"
 method: GET
-url: '{{baseUrl}}/users/api/get'
-order: 4000
 scripts:
   - type: afterResponse
-    language: text/javascript
     code: |-
       pm.test('Status code is 200', function () {
         pm.response.to.have.status(200);
@@ -16,6 +14,12 @@ scripts:
 
       const data = pm.response.json();
 
-      pm.test('Response is an array', function () {
-        pm.expect(data).to.be.an('array');
+      pm.test('Response is an object', function () {
+        pm.expect(data).to.be.an('object');
       });
+
+      pm.test('Response has an id', function () {
+        pm.expect(data).to.have.property('id');
+      });
+    language: text/javascript
+order: 4000

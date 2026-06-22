@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/posts/api"
 method: POST
-url: '{{baseUrl}}/posts/api'
-order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
@@ -13,11 +11,10 @@ body:
       "body": "New post from Postman",
       "slug": "new-post",
       "date_released": "2026-06-21T00:00:00Z",
-      "author": 1
+      "author": {{userId}}
     }
 scripts:
   - type: afterResponse
-    language: text/javascript
     code: |-
       pm.test('Status code is 201', function () {
         pm.response.to.have.status(201);
@@ -32,3 +29,5 @@ scripts:
       pm.test('Response is an object', function () {
         pm.expect(data).to.be.an('object');
       });
+    language: text/javascript
+order: 1000

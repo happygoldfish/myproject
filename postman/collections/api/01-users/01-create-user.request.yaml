@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/users/api/create"
 method: POST
-url: '{{baseUrl}}/users/api/create'
-order: 5000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
@@ -17,7 +15,6 @@ body:
     }
 scripts:
   - type: afterResponse
-    language: text/javascript
     code: |-
       pm.test('Status code is 200 or 201', function () {
         pm.expect(pm.response.code).to.be.oneOf([200, 201]);
@@ -34,3 +31,5 @@ scripts:
           return value !== null && (Array.isArray(value) || typeof value === 'object');
         });
       });
+    language: text/javascript
+order: 1000

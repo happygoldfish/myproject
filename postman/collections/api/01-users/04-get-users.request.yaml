@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/posts/api/{{postId}}"
+url: "{{baseUrl}}/users/api/get"
 method: GET
 scripts:
   - type: afterResponse
@@ -13,12 +13,9 @@ scripts:
       });
 
       const data = pm.response.json();
-      pm.test('Response is an object', function () {
-        pm.expect(data).to.be.an('object');
-      });
 
-      pm.test('Post has an id', function () {
-        pm.expect(data).to.have.property('id');
+      pm.test('Response is an array', function () {
+        pm.expect(data).to.be.an('array');
       });
     language: text/javascript
 order: 2000

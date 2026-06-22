@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/users/api/user_list/"
 method: GET
-url: '{{baseUrl}}/users/api/user_list/'
-order: 6000
 scripts:
   - type: afterResponse
-    language: text/javascript
     code: |-
       pm.test('Status code is 200', function () {
         pm.response.to.have.status(200);
@@ -19,3 +17,5 @@ scripts:
       pm.test('Response is an array', function () {
         pm.expect(data).to.be.an('array');
       });
+    language: text/javascript
+order: 3000

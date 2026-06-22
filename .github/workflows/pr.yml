@@ -64,3 +64,4 @@ jobs:
             - name: Run postman tests 
               run: |
                 postman collection run "postman/collections/api"
+                #postman collection run 

@@ -1,10 +1,8 @@
 $kind: http-request
+url: "{{baseUrl}}/posts/api/{{postId}}"
 method: PUT
-url: '{{baseUrl}}/posts/api/{{postId}}'
-order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
@@ -17,7 +15,6 @@ body:
     }
 scripts:
   - type: afterResponse
-    language: text/javascript
     code: |-
       pm.test('Status code is 200', function () {
         pm.response.to.have.status(200);
@@ -32,3 +29,5 @@ scripts:
       pm.test('Response is an object', function () {
         pm.expect(data).to.be.an('object');
       });
+    language: text/javascript
+order: 3000
