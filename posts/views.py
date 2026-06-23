@@ -13,6 +13,7 @@ from .models import Post
 from comment.models import Comment
 from comment.forms import CommentForm
 from .serializer import PostSerializer
+
 # Create your views here.
 
 def posts_list(request):
@@ -88,6 +89,32 @@ def post_new(request):
     else:
         form = forms.CreatePost()
     return render(request, 'posts/post_new.html', {'form': form})
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def post_list(request, pk):
+    try:
+        post = Post.objects.get(pk=pk)
+    except post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = PostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UserListAPIView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 @api_view(['GET'])
 def get_posts(request):
