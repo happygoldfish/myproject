@@ -20,4 +20,5 @@ urlpatterns = [
     path('api/create', views.create_user, name='create_user'),
     path('api/user_list/', views.UserListAPIView.as_view(), name='user-list'),
     path('api/<int:pk>', views.user_detail, name='user-detail'),
+    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

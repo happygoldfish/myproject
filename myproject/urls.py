@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from . import views
+from users.views import *
+from posts.views import *
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.static import serve
@@ -26,9 +28,13 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     path('admin/', admin.site.urls),
     path('', views.homepage),
+    path('react/users/', UserView.as_view(), name="testing_react_users"),
+    path('react/users/<int:pk>/', UserDetailView.as_view(), name="testing_react_user_details"),
     path('about/', views.about),
     path('posts/', include('posts.urls')),
     path('users/', include('users.urls')),
+    #path('react/post/', PostView.as_view(), name="testing_react_posts"),
+    #path('react/post/<int:pk>/', PostDetailView.as_view(), name="testing_react_post_details"),
     #path('posts/'), include(comment.urls)),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
