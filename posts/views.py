@@ -112,7 +112,7 @@ def api_list(request, pk):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class UserListAPIView(generics.ListAPIView):
+class PostListAPIView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
