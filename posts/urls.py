@@ -18,6 +18,6 @@ urlpatterns = [
     path('<slug:slug>/delete/', login_required(views.DeletePostView.as_view()), name='post-delete'),
     path('api/<int:pk>', views.post_detail, name='post_detail'),
     path('api/create/', views.create_post, name='create_post'),
-    path('api/list/', views.posts_list, name='posts_list'),
+    path('api/list/<pk>', views.api_list, name='posts_list'),
     path('comment/delete/<pk>', views.commentDeleteView, name='commentDelete'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   

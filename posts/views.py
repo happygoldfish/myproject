@@ -91,7 +91,7 @@ def post_new(request):
     return render(request, 'posts/post_new.html', {'form': form})
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def post_list(request, pk):
+def api_list(request, pk):
     try:
         post = Post.objects.get(pk=pk)
     except post.DoesNotExist:
