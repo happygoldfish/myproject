@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{baseUrl}}/posts/api/{{postId}}"
+method: DELETE
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 200, 202, or 204', function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);
+      });
+    language: text/javascript
+order: 1000
