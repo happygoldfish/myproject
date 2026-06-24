@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/posts/api/create/"
+url: "{{baseUrl}}/posts/api/create"
 method: POST
 headers:
   Content-Type: application/json
@@ -10,7 +10,7 @@ body:
       "title": "New Post Title",
       "body": "NewPostBody",
       "slug": "New-Post-Title",
-      "author": "{{userId}}"
+      "author_id": "{{userId}}"
     }
 scripts:
   - type: afterResponse
