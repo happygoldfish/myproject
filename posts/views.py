@@ -1,6 +1,10 @@
+from urllib import request
+
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy, reverse
+
+from users import serializer
 from .models import Post
 from django.contrib.auth.decorators import login_required
 from . import forms
@@ -25,8 +29,8 @@ class PostView(APIView):
     def post(self, request):
         serializer = PostSerializer(data=request.data, context={"request": request})
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)  
 
 class PostDetailView(APIView):
     def get_object(self, pk):
