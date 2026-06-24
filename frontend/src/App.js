@@ -24,7 +24,6 @@ class App extends React.Component {
     newPostTitle: '',
     newPostBody: '',
     newPostSlug: '',
-    newPostDateCreated: '',
     newPostBanner: '',
     newPostAuthor: '',
   };
@@ -129,7 +128,6 @@ class App extends React.Component {
       title: this.state.newPostTitle,
       body: this.state.newPostBody,
       slug: this.state.newPostSlug,
-      date_created: this.state.newPostDateCreated,
       banner: this.state.newPostBanner,
       author_id: this.state.newPostAuthor, // was author
     };
@@ -141,7 +139,6 @@ class App extends React.Component {
           newPostTitle: '',
           newPostBody: '',
           newPostSlug: '',
-          newPostDateCreated: '',
           newPostBanner: '',
           newPostAuthor: '',
         }));
@@ -208,7 +205,7 @@ class App extends React.Component {
       // Posts
       posts, editingPostId,
       editPostTitle, editPostBody, editPostSlug, editPostBanner, editPostAuthor,
-      newPostTitle, newPostBody, newPostSlug, newPostDateCreated, newPostBanner, newPostAuthor
+      newPostTitle, newPostBody, newPostSlug, newPostBanner, newPostAuthor
     } = this.state;
 
     return (
