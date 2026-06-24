@@ -4,12 +4,7 @@ from users.models import User
 
 class PostSerializer(serializers.ModelSerializer):
     banner = serializers.SerializerMethodField()
-    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
-    author_id = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        source='author',
-        write_only=True
-    )
+    author = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
 
     class Meta:
         model = Post
