@@ -18,21 +18,15 @@ from rest_framework.views import APIView
 # Create your views here.
 class PostView(APIView):
     def get(self, request):
-        output = [{"id": output.id,
-                   "title": output.title,
-                   "body": output.body,
-                   "slug": output.slug,
-                   "date_created": output.date_created,
-                   "banner": output.banner,
-                   "author": output.author,}
-                   for output in Post.objects.all()]
-        return Response(output)
-    
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True, context={"request": request})
+        return Response(serializer.data)
+
     def post(self, request):
-        serializer = PostSerializer(data=request.data)
+        serializer = PostSerializer(data=request.data, context={"request": request})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class PostDetailView(APIView):
     def get_object(self, pk):

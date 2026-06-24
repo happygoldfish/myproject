@@ -132,7 +132,7 @@ class App extends React.Component {
       slug: this.state.newPostSlug,
       date_created: this.state.newPostDateCreated,
       banner: this.state.newPostBanner,
-      author: this.state.newPostAuthor,
+      author_id: this.state.newPostAuthor, // was author
     };
 
     axios.post('http://localhost:8000/react/posts/', newPostData)
@@ -182,8 +182,9 @@ class App extends React.Component {
       title: this.state.editPostTitle,
       body: this.state.editPostBody,
       slug: this.state.editPostSlug,
+      date_created: this.state.editPostDateCreated,
       banner: this.state.editPostBanner,
-      author: this.state.editPostAuthor,
+      author_id: this.state.editPostAuthor, // was author
     };
 
     axios.put(`http://localhost:8000/react/posts/${id}/`, updatedPostData)
