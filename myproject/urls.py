@@ -33,8 +33,8 @@ urlpatterns = [
     path('about/', views.about),
     path('posts/', include('posts.urls')),
     path('users/', include('users.urls')),
-    #path('react/post/', PostView.as_view(), name="testing_react_posts"),
-    #path('react/post/<int:pk>/', PostDetailView.as_view(), name="testing_react_post_details"),
+    path('react/posts/', PostView.as_view(), name="testing_react_posts"),
+    path('react/posts/<int:pk>/', PostDetailView.as_view(), name="testing_react_post_details"),
     #path('posts/'), include(comment.urls)),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
