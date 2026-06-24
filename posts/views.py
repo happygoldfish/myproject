@@ -34,7 +34,7 @@ class PostDetailView(APIView):
 
     def put(self, request, pk):
         objekt = self.get_object(pk)
-        serializer = PostSerializer(objekt, data=request.data)
+        serializer = PostSerializer(objekt, data=request.data, partial=True)
         
         if serializer.is_valid():
             serializer.save()
@@ -132,7 +132,7 @@ def api_list(request, pk):
         return Response(serializer.data)
     
     elif request.method == 'PUT':
-        serializer = PostSerializer(post, data=request.data)
+        serializer = PostSerializer(post, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -172,7 +172,7 @@ def post_detail(request, pk):
         return Response(serializer.data)
     
     elif request.method == 'PUT':
-        serializer = PostSerializer(post, data=request.data)
+        serializer = PostSerializer(post, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -196,5 +196,3 @@ class DeletePostView(DeleteView):
     model = Post
     template_name = 'posts/post_delete.html'
     success_url = reverse_lazy('posts:my-posts')
-    
-        
