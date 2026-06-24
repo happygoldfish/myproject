@@ -127,7 +127,7 @@ class App extends React.Component {
       body: this.state.newPostBody,
       slug: this.state.newPostSlug,
       banner: this.state.newPostBanner,
-      author_id: this.state.newPostAuthor,
+      author: this.state.newPostAuthor,
     };
 
     axios.post('http://localhost:8000/react/posts/', newPostData)
