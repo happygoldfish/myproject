@@ -18,7 +18,6 @@ class App extends React.Component {
     editPostTitle: '',
     editPostBody: '',
     editPostSlug: '',
-    editPostDateCreated: '',
     editPostBanner: '',
     editPostAuthor: '',
 
@@ -115,15 +114,18 @@ class App extends React.Component {
   fetchPostData = () => {
     axios.get('http://localhost:8000/react/posts/')
       .then(res => {
-        this.setState({ posts: res.data });
+        console.log('Posts response:', res.data);
+        const posts = Array.isArray(res.data) ? res.data : (res.data.results || []);
+        this.setState({ posts });
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error('Error fetching posts:', err.response?.status, err.response?.data || err.message);
+      });
   };
 
   handleCreatePost = (e) => {
     e.preventDefault();
 
-    // id is read-only and should come from backend
     const newPostData = {
       title: this.state.newPostTitle,
       body: this.state.newPostBody,
@@ -170,7 +172,6 @@ class App extends React.Component {
       editPostTitle: post.title || '',
       editPostBody: post.body || '',
       editPostSlug: post.slug || '',
-      editPostDateCreated: post.date_created || '',
       editPostBanner: post.banner || '',
       editPostAuthor: post.author || '',
     });
@@ -181,7 +182,6 @@ class App extends React.Component {
       title: this.state.editPostTitle,
       body: this.state.editPostBody,
       slug: this.state.editPostSlug,
-      date_created: this.state.editPostDateCreated,
       banner: this.state.editPostBanner,
       author: this.state.editPostAuthor,
     };
@@ -194,7 +194,6 @@ class App extends React.Component {
           editPostTitle: '',
           editPostBody: '',
           editPostSlug: '',
-          editPostDateCreated: '',
           editPostBanner: '',
           editPostAuthor: '',
         }));
@@ -208,7 +207,7 @@ class App extends React.Component {
       details, editingId, editUsername, editEmail, newUsername, newEmail, newPassword,
       // Posts
       posts, editingPostId,
-      editPostTitle, editPostBody, editPostSlug, editPostDateCreated, editPostBanner, editPostAuthor,
+      editPostTitle, editPostBody, editPostSlug, editPostBanner, editPostAuthor,
       newPostTitle, newPostBody, newPostSlug, newPostDateCreated, newPostBanner, newPostAuthor
     } = this.state;
 
@@ -332,16 +331,6 @@ class App extends React.Component {
 
             <div style={{ marginBottom: '10px' }}>
               <input
-                type="datetime-local"
-                placeholder="Date Created"
-                value={newPostDateCreated}
-                onChange={(e) => this.setState({ newPostDateCreated: e.target.value })}
-                style={{ padding: '5px', width: '100%' }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '10px' }}>
-              <input
                 type="text"
                 placeholder="Banner (URL or path)"
                 value={newPostBanner}
@@ -388,12 +377,6 @@ class App extends React.Component {
                     type="text"
                     value={editPostSlug}
                     onChange={(e) => this.setState({ editPostSlug: e.target.value })}
-                    style={{ display: 'block', marginBottom: '10px', width: '100%' }}
-                  />
-                  <input
-                    type="datetime-local"
-                    value={editPostDateCreated}
-                    onChange={(e) => this.setState({ editPostDateCreated: e.target.value })}
                     style={{ display: 'block', marginBottom: '10px', width: '100%' }}
                   />
                   <input
