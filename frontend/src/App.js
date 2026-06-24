@@ -13,7 +13,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchUserData();
   }
 
   fetchUserData = () => {
