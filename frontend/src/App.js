@@ -114,7 +114,6 @@ class App extends React.Component {
   fetchPostData = () => {
     axios.get('http://localhost:8000/react/posts/')
       .then(res => {
-        console.log('Posts response:', res.data);
         const posts = Array.isArray(res.data) ? res.data : (res.data.results || []);
         this.setState({ posts });
       })
