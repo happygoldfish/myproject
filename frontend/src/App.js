@@ -13,7 +13,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchUserData();
+    this.fetchData();
   }
 
   fetchUserData = () => {
@@ -96,7 +96,6 @@ class App extends React.Component {
 
     return (
       <div>
-
         <header>Data from django</header>
         <hr />
         <h3>Add User</h3>

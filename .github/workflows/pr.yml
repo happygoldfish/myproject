@@ -49,12 +49,15 @@ jobs:
               run: |
                 npm ci && npx playwright install --with-deps
 
-            - name: Run npm test
+            - name: Run Playwright tests
               env:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
               run: |
                 python manage.py runserver 0.0.0.0:8000 &
+                cd frontend
+                npm install
+                npm start &
                 #wait for software to start
                 sleep 5
                 #run tests

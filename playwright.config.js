@@ -14,7 +14,7 @@ export default defineConfig({
   },
   reporter: [['list', { open: 'always' }], ['html', { open: 'on-failure' }]],
   use: {
-    baseURL: 'http://127.0.0.1:8000',  // Ändra till din applikations URL, t ex http://localhost:5010 
+    baseURL: 'http://127.0.0.1:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure'
