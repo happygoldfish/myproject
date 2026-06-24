@@ -18,6 +18,7 @@ from comment.models import Comment
 from comment.forms import CommentForm
 from .serializer import PostSerializer
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 class PostView(APIView):
@@ -29,7 +30,7 @@ class PostView(APIView):
     def post(self, request):
         serializer = PostSerializer(data=request.data, context={"request": request})
         if serializer.is_valid(raise_exception=True):
-            serializer.save(author=request.user)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)  
 
 class PostDetailView(APIView):

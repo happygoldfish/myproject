@@ -330,13 +330,17 @@ class App extends React.Component {
             </div>
 
             <div style={{ marginBottom: '10px' }}>
-              <input
-                type="text"
-                placeholder="Author"
+              <select
                 value={newPostAuthor}
                 onChange={(e) => this.setState({ newPostAuthor: e.target.value })}
+                required
                 style={{ padding: '5px', width: '100%' }}
-              />
+              >
+                <option value="">-- Select Author --</option>
+                {details.map(user => (
+                  <option key={user.id} value={user.username}>{user.username}</option>
+                ))}
+              </select>
             </div>
 
             <button type="submit" style={{ padding: '7px 15px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}>
