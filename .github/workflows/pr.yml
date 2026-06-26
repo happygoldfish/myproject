@@ -63,6 +63,7 @@ jobs:
                 sleep 5
                 #run tests
                 #npm test
+                cd ..
                 npx playwright test
 
             - name: Set up environment for postman tests
