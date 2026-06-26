@@ -17,4 +17,13 @@ variables:
     value: "newUserPass"
   - key: newUserEmail
     value: "NotAReal@mail.com"
-
+  - key: updatedUser
+    value: "updateduser" 
+  - key: updatedUserName
+    value: "Updated"
+  - key: updatedUserLName
+    value: "User"
+  - key: updatedUserPass
+    value: "ChangeMe123!"
+  - key: updatedUserEmail
+    value: "updateduser@example.com"

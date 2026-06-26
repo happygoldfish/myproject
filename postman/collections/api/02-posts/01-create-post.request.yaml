@@ -10,6 +10,7 @@ body:
       "title": "New Post Title",
       "body": "NewPostBody",
       "slug": "New-Post-Title",
+      "author": "{{updatedUser}}"
     }
     
 scripts:

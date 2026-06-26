@@ -7,11 +7,11 @@ body:
   type: json
   content: |-
     {
-      "username": "updateduser",
-      "first_name": "Updated",
-      "last_name": "User",
-      "email": "updateduser@example.com",
-      "password": "ChangeMe123!"
+      "username": {{updatedUser}}",
+      "first_name": "{{updatedUserName}}",
+      "last_name": "{{updatedUserLName}}",
+      "email": "{{updatedUserEmail}}",
+      "password": "{{updatedUserPass}}"
     }
 scripts:
   - type: afterResponse

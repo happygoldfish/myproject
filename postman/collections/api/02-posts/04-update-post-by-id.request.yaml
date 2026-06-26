@@ -10,7 +10,7 @@ body:
       "title": "Changed Post Title",
       "body": "ChangedPostBody",
       "slug": "Changed-Post-Title",
-      "author": "{{userId}}"
+      "author": "{{updatedUser}}"
     }
 scripts:
   - type: afterResponse
