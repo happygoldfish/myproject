@@ -1,7 +1,7 @@
 name: Quality Assurance
 on:
   push:
-    branches: ["*"]
+    branches: ["**"]
   pull_request:
     branches: ["main"]
 
