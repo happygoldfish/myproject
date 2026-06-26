@@ -1,28 +1,32 @@
-const { expect } = require('@playwright/test');
 const { createBdd } = require('playwright-bdd');
-
 const { Given, When, Then } = createBdd();
+const { expect } = require('@playwright/test');
 
-Given('att jag öppnar startsidan {string}', async ({ page }, url) => {
+Given('I open the homepage {string}', async ({ page }, url) => {
   await page.goto(url);
 });
 
-Given('att jag anger användarnamn {string}', async ({ page }, username) => {
-  await page.fill('#username', username);
+Given('I enter the username {string}', async ({ page }, username) => {
+  await page.getByLabel(/username/i).fill(username);
 });
 
-Given('att jag anger e-post {string}', async ({ page }, email) => {
-  await page.fill('#email', email);
+Given('I enter the email {string}', async ({ page }, email) => {
+  await page.getByLabel(/email/i).fill(email);
 });
 
-Given('att jag anger lösenord {string}', async ({ page }, password) => {
-  await page.fill('#password', password);
+Given('I enter the password {string}', async ({ page }, password) => {
+  await page.getByLabel(/password/i).fill(password);
 });
 
-When('jag klickar på knappen {string}', async ({ page }, buttonText) => {
+When('I click the button {string}', async ({ page }, buttonText) => {
   await page.getByRole('button', { name: buttonText }).click();
 });
 
-Then('ska sidan innehålla texten {string}', async ({ page }, expectedText) => {
-  await expect(page.locator('body')).toContainText(expectedText);
+Then('I should see the text {string}', async ({ page }, text) => {
+  await expect(page.getByRole('heading', { name: text })).toBeVisible();
+});
+
+
+Given('att jag öppnar sidan {string}', async ({ page }, url) => {
+  await page.goto(url);
 });

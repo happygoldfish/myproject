@@ -212,6 +212,7 @@ class App extends React.Component {
           <form onSubmit={this.handleCreate}>
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="username"
                 type="text"
                 placeholder="Användarnamn"
                 value={newUsername}
@@ -222,6 +223,7 @@ class App extends React.Component {
             </div>
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="email"
                 type="email"
                 placeholder="E-post"
                 value={newEmail}
@@ -232,6 +234,7 @@ class App extends React.Component {
             </div>
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="password"
                 type="password"
                 placeholder="Lösenord"
                 value={newPassword}
@@ -240,8 +243,8 @@ class App extends React.Component {
                 style={{ padding: '5px', width: '100%' }}
               />
             </div>
-            <button type="submit" style={{ padding: '7px 15px', backgroundColor: '#007bff', color: 'white', border: 'none', cursor: 'pointer' }}>
-              Skapa användare
+            <button aria-label="submit" type="submit" style={{ padding: '7px 15px', backgroundColor: '#007bff', color: 'white', border: 'none', cursor: 'pointer' }}>
+              Submit
             </button>
           </form>
         </div>
