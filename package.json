@@ -28,7 +28,11 @@
   },
   "homepage": "https://github.com/happygoldfish/myproject#readme",
   "devDependencies": {
+    "@cucumber/cucumber": "^13.0.0",
     "@playwright/test": "^1.61.0",
     "playwright-bdd": "^9.2.0"
+  },
+  "dependencies": {
+    "cucumber": "^6.0.7"
   }
 }
