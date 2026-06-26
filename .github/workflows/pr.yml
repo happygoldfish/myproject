@@ -1,9 +1,9 @@
 name: Quality Assurance
 on:
   push:
-    branches: ["main", "TestForCI"]
+    branches: ["**"]
   pull_request:
-    branches: ["main", "TestForCI"]
+    branches: ["main"]
 
 jobs:
     quality-assurance:
@@ -57,11 +57,14 @@ jobs:
                 python manage.py runserver 0.0.0.0:8000 &
                 cd frontend
                 npm install
+                npm install --save-dev @cucumber/cucumber
                 npm start &
                 #wait for software to start
                 sleep 5
                 #run tests
-                npm test
+                #npm test
+                cd ..
+                npx playwright test
 
             - name: Set up environment for postman tests
               run: |
