@@ -18,7 +18,7 @@ variables:
   - key: newUserEmail
     value: "NotAReal@mail.com"
   - key: updatedUser
-    value: "updateduser" 
+    value: "updatedUser" 
   - key: updatedUserName
     value: "Updated"
   - key: updatedUserLName
