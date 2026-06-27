@@ -1,9 +1,9 @@
 // Generated from: e2e\ui\features\98-cleanuppost.feature
 import { test } from "playwright-bdd";
 
-test.describe('User Cleanup', () => {
+test.describe('Post Cleanup', () => {
 
-  test('clean up user after tests', async ({ Given, When, Then, page }) => { 
+  test('clean up post after tests', async ({ Given, When, Then, page }) => { 
     await Given('I open the homepage "http://localhost:3000/"', null, { page }); 
     await When('I click the button "Ta bort Post"', null, { page }); 
     await Then('the post title heading "Test Title" should no longer be visible on the page', null, { page }); 
