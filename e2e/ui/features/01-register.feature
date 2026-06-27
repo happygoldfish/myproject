@@ -6,4 +6,4 @@ Feature: User Registration
         And I enter the email "New@mail.org"
         And I enter the password "NewUser123!"
         When I click the button "Submit"
-        Then I should see the text "newuser"
+        Then I should see the username heading "newuser"
