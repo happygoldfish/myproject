@@ -4,9 +4,9 @@ variables:
   - key: baseUrl
     value: 'http://127.0.0.1:8000'
   - key: postId
-    value: '1'
+    value: '2'
   - key: userId
-    value: '1'
+    value: '2'
   - key: newUser
     value: "newUser" 
   - key: newUserName

@@ -212,6 +212,7 @@ class App extends React.Component {
           <form onSubmit={this.handleCreate}>
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="username"
                 type="text"
                 placeholder="Användarnamn"
                 value={newUsername}
@@ -222,6 +223,7 @@ class App extends React.Component {
             </div>
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="email"
                 type="email"
                 placeholder="E-post"
                 value={newEmail}
@@ -232,6 +234,7 @@ class App extends React.Component {
             </div>
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="password"
                 type="password"
                 placeholder="Lösenord"
                 value={newPassword}
@@ -240,8 +243,8 @@ class App extends React.Component {
                 style={{ padding: '5px', width: '100%' }}
               />
             </div>
-            <button type="submit" style={{ padding: '7px 15px', backgroundColor: '#007bff', color: 'white', border: 'none', cursor: 'pointer' }}>
-              Skapa användare
+            <button aria-label="submit" type="submit" style={{ padding: '7px 15px', backgroundColor: '#007bff', color: 'white', border: 'none', cursor: 'pointer' }}>
+              Submit
             </button>
           </form>
         </div>
@@ -270,8 +273,8 @@ class App extends React.Component {
                   <h2>{output.username}</h2>
                   <p>{output.email}</p>
                   <button onClick={() => this.startEdit(output)}>Redigera</button>
-                  <button onClick={() => this.handleDelete(output.id)} style={{ marginLeft: '10px', color: 'red' }}>
-                    Ta bort
+                  <button aria-label="Ta bort Användare" onClick={() => this.handleDelete(output.id)} style={{ marginLeft: '10px', color: 'red' }}>
+                    Ta bort Användare
                   </button>
                 </div>
               )}
@@ -289,6 +292,7 @@ class App extends React.Component {
           <form onSubmit={this.handleCreatePost}>
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="title"
                 type="text"
                 placeholder="Title"
                 value={newPostTitle}
@@ -300,6 +304,7 @@ class App extends React.Component {
 
             <div style={{ marginBottom: '10px' }}>
               <textarea
+                aria-label="body"
                 placeholder="Body"
                 value={newPostBody}
                 onChange={(e) => this.setState({ newPostBody: e.target.value })}
@@ -311,6 +316,7 @@ class App extends React.Component {
 
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="slug"
                 type="text"
                 placeholder="Slug"
                 value={newPostSlug}
@@ -321,6 +327,7 @@ class App extends React.Component {
 
             <div style={{ marginBottom: '10px' }}>
               <input
+                aria-label="banner"
                 type="text"
                 placeholder="Banner (URL or path)"
                 value={newPostBanner}
@@ -331,6 +338,7 @@ class App extends React.Component {
 
             <div style={{ marginBottom: '10px' }}>
               <select
+                aria-label="author"
                 value={newPostAuthor}
                 onChange={(e) => this.setState({ newPostAuthor: e.target.value })}
                 required
@@ -343,7 +351,7 @@ class App extends React.Component {
               </select>
             </div>
 
-            <button type="submit" style={{ padding: '7px 15px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}>
+            <button aria-label="Skapa inlägg" type="submit" style={{ padding: '7px 15px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}>
               Skapa inlägg
             </button>
           </form>
@@ -389,8 +397,8 @@ class App extends React.Component {
                   <p><strong>Author:</strong> {post.author}</p>
 
                   <button onClick={() => this.startEditPost(post)}>Redigera</button>
-                  <button onClick={() => this.handleDeletePost(post.id)} style={{ marginLeft: '10px', color: 'red' }}>
-                    Ta bort
+                  <button aria-label="Ta bort Post" onClick={() => this.handleDeletePost(post.id)} style={{ marginLeft: '10px', color: 'red' }}>
+                    Ta bort Post
                   </button>
                 </div>
               )}

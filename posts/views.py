@@ -37,6 +37,11 @@ class PostDetailView(APIView):
     def get_object(self, pk):
         return get_object_or_404(Post, pk=pk)
 
+    def get(self, request, pk):
+        objekt = self.get_object(pk)
+        serializer = PostSerializer(objekt, context={"request": request})
+        return Response(serializer.data)
+
     def put(self, request, pk):
         objekt = self.get_object(pk)
         serializer = PostSerializer(objekt, data=request.data, partial=True)

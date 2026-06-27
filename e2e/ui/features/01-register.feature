@@ -5,6 +5,5 @@ Feature: User Registration
         And I enter the username "newuser"
         And I enter the email "New@mail.org"
         And I enter the password "NewUser123!"
-        When I click the button "Skapa användare"
-        Then I should see the text "newuser"
-        And I should see the text "New@mail.org"
+        When I click the button "Submit"
+        Then I should see the username heading "newuser"
