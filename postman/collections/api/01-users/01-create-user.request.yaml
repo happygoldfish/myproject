@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/users/api/create"
+url: "{{baseUrl}}/react/users/"
 method: POST
 headers:
   Content-Type: application/json
