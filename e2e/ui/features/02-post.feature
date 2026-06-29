@@ -1,7 +1,7 @@
-Feature: User Registration
+Feature: Create Post
 
     Scenario: create a new post with valid details
-        Given I open the homepage "http://localhost:3000/"
+        Given I open the post page "http://localhost:3000/posts"
         And I enter the title "Test Title"
         And I enter the body "Test body for e2e testing."
         And I enter the slug "Test-Title"

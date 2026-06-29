@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/users/api/create"
+url: "{{baseUrl}}/react/users/"
 method: POST
 headers:
   Content-Type: application/json
@@ -31,5 +31,9 @@ scripts:
           return value !== null && (Array.isArray(value) || typeof value === 'object');
         });
       });
+
+      if (data && data.id) {
+        pm.collectionVariables.set('userId', String(data.id));
+      }
     language: text/javascript
 order: 1000
