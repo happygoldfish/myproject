@@ -44,6 +44,15 @@ jobs:
                 PYTHONUNBUFFERED: 1
               run: |
                 pytest -v
+            
+            - name: Set up environment for postman tests
+              run: |
+                npm install -g postman-cli
+            
+            - name: Run postman tests 
+              run: |
+                postman collection run "postman/collections/api"
+                #postman collection run 
 
             - name: Install npm & Playwright
               run: |
@@ -66,11 +75,4 @@ jobs:
                 cd ..
                 npx playwright test
 
-            - name: Set up environment for postman tests
-              run: |
-                npm install -g postman-cli
             
-            - name: Run postman tests 
-              run: |
-                postman collection run "postman/collections/api"
-                #postman collection run 
