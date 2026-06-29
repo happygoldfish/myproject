@@ -15,11 +15,17 @@ from django.views import generic
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
+from django.db import transaction
+from django.db import IntegrityError
+from django.db.models.deletion import ProtectedError
 from .models import User
 from .serializer import UserSerializer
 from rest_framework.views import APIView
 
 class UserView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         output = [{"id": output.id,
                    "username": output.username,
@@ -37,6 +43,8 @@ class UserView(APIView):
             return Response(serializer.data)
 
 class UserDetailView(APIView):
+    permission_classes = [AllowAny]
+
     def get_object(self, pk):
         return get_object_or_404(User, pk=pk)
 
@@ -51,8 +59,19 @@ class UserDetailView(APIView):
 
     def delete(self, request, pk):
         objekt = self.get_object(pk)
-        objekt.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        try:
+            with transaction.atomic():
+                # Explicitly remove profile first to avoid relation edge-cases.
+                Profile.objects.filter(user=objekt).delete()
+                objekt.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ProtectedError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_409_CONFLICT)
+        except IntegrityError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_409_CONFLICT)
+        except Exception as exc:
+            # Prevent a generic 500 and surface the real backend reason to the client.
+            return Response({"detail": str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 def get_users(request):
