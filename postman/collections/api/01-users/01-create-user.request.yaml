@@ -31,5 +31,9 @@ scripts:
           return value !== null && (Array.isArray(value) || typeof value === 'object');
         });
       });
+
+      if (data && data.id) {
+        pm.collectionVariables.set('userId', String(data.id));
+      }
     language: text/javascript
 order: 1000

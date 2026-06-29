@@ -48,6 +48,11 @@ class UserDetailView(APIView):
     def get_object(self, pk):
         return get_object_or_404(User, pk=pk)
 
+    def get(self, request, pk):
+        objekt = self.get_object(pk)
+        serializer = UserSerializer(objekt)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def put(self, request, pk):
         objekt = self.get_object(pk)
         serializer = UserSerializer(objekt, data=request.data)
