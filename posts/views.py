@@ -114,13 +114,6 @@ def commentDeleteView(request, pk):
         return redirect('posts:page', slug=postSlug)
     return render(request, 'posts/comment_delete.html', {'comment': comment})
 
-def posts_api(request):
-    posts = Post.objects.all().order_by('-date_created')
-    data = {
-        'posts': list(posts.values())
-    }
-    return JsonResponse(data)
-
 @login_required(login_url='/users/login/')
 def post_new(request):
     if request.method == 'POST':
@@ -134,67 +127,9 @@ def post_new(request):
         form = forms.CreatePost()
     return render(request, 'posts/post_new.html', {'form': form})
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def api_list(request, pk):
-    try:
-        post = Post.objects.get(pk=pk)
-    except post.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
-    
-    elif request.method == 'PUT':
-        serializer = PostSerializer(post, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    elif request.method == 'DELETE':
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 class PostListAPIView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
-@api_view(['GET'])
-def get_posts(request):
-    posts = Post.objects.all()
-    serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)
-
-@api_view(['POST'])
-def create_post(request):
-    serializer = PostSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def post_detail(request, pk):
-    try:
-        post = Post.objects.get(pk=pk)
-    except Post.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
-    
-    elif request.method == 'PUT':
-        serializer = PostSerializer(post, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    elif request.method == 'DELETE':
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UpdatePostView(UpdateView):
     model = Post
@@ -204,7 +139,6 @@ class UpdatePostView(UpdateView):
     
     def form_valid(self, form):
         return super().form_valid(form)
-
 
 class DeletePostView(DeleteView):
     model = Post

@@ -78,49 +78,12 @@ class UserDetailView(APIView):
             # Prevent a generic 500 and surface the real backend reason to the client.
             return Response({"detail": str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['GET'])
-def get_users(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def create_user(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([AllowAny])
-def user_detail(request, pk):
-    try:
-        user = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-    
-    elif request.method == 'PUT':
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    elif request.method == 'DELETE':
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-# Create your views here.
+
+#Views for django UI
 def register_view(request):
     if request.method == "POST": 
         form = UserCreationForm(request.POST) 
@@ -184,13 +147,6 @@ def users_list(request):
     User = get_user_model()
     all_users = User.objects.all().order_by('-date_joined')
     return render(request, 'users/users_list.html', {'users': all_users})
-
-def users_api(request):
-    users = User.objects.all()
-    data = {
-        'users': list(users.values())
-    }
-    return JsonResponse(data)    
     
 class PasswordChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
@@ -221,17 +177,6 @@ def edit_profile(request, pk):
     }
     return render(request, 'users/edit_profile.html', context)
 
-#class UpdateUserView(generic.UpdateView):
-#    model = Profile
-#    form_class = forms.EditProfileForm
-#    template_name = 'users/edit_profile.html'
-#    success_url = reverse_lazy('posts:my-posts')
-#    
-#    def get_object(self):
-#        return self.request.user
-     
-     #def form_valid(self, form):
-     #    return super().form_valid(form) 
      
      
         
