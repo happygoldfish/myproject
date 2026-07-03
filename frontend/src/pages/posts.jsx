@@ -1,0 +1,268 @@
+import axios from 'axios';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+class App extends React.Component {
+    state = {
+        // Users
+        details: [],
+        editingId: null,
+        editUsername: '',
+        editEmail: '',
+        newUsername: '',
+        newEmail: '',
+        newPassword: '',
+
+        // Posts
+        posts: [],
+        editingPostId: null,
+        editPostTitle: '',
+        editPostBody: '',
+        editPostSlug: '',
+
+        newPostTitle: '',
+        newPostBody: '',
+        newPostSlug: '',
+        newPostBanner: '',
+        newPostAuthor: '',
+    };
+
+    componentDidMount() {
+        this.fetchPostData();
+        this.fetchUserData();
+    }
+
+    // -------------------
+    // Posts
+    // -------------------
+    fetchUserData = () => {
+        axios.get('http://localhost:8000/react/users/')
+            .then(res => {
+                this.setState({ details: res.data });
+            })
+            .catch(err => console.error(err));
+    };
+    fetchPostData = () => {
+        axios.get('http://localhost:8000/react/posts/')
+            .then(res => {
+                const posts = Array.isArray(res.data) ? res.data : (res.data.results || []);
+                this.setState({ posts });
+            })
+            .catch(err => {
+                console.error('Error fetching posts:', err.response?.status, err.response?.data || err.message);
+            });
+    };
+
+    handleCreatePost = (e) => {
+        e.preventDefault();
+
+        const newPostData = {
+            title: this.state.newPostTitle,
+            body: this.state.newPostBody,
+            slug: this.state.newPostSlug,
+            banner: this.state.newPostBanner,
+            author: this.state.newPostAuthor,
+        };
+
+        axios.post('http://localhost:8000/react/posts/', newPostData)
+            .then(res => {
+                this.setState(prev => ({
+                    posts: [...prev.posts, res.data],
+                    newPostTitle: '',
+                    newPostBody: '',
+                    newPostSlug: '',
+                    newPostBanner: '',
+                    newPostAuthor: '',
+                }));
+            })
+            .catch(err => {
+                if (err.response) {
+                    console.error('Valideringsfel vid skapande av post:', err.response.data);
+                } else {
+                    console.error(err);
+                }
+            });
+    };
+
+    handleDeletePost = (id) => {
+        axios.delete(`http://localhost:8000/react/posts/${id}/`)
+            .then(() => {
+                this.setState(prev => ({
+                    posts: prev.posts.filter(post => post.id !== id)
+                }));
+            })
+            .catch(err => console.error(err));
+    };
+
+    startEditPost = (post) => {
+        this.setState({
+            editingPostId: post.id,
+            editPostTitle: post.title || '',
+            editPostBody: post.body || '',
+            editPostSlug: post.slug || '',
+        });
+    };
+
+    handleUpdatePost = (id) => {
+        const updatedPostData = {
+            title: this.state.editPostTitle,
+            body: this.state.editPostBody,
+            slug: this.state.editPostSlug,
+        };
+
+        axios.put(`http://localhost:8000/react/posts/${id}/`, updatedPostData)
+            .then(res => {
+                this.setState(prev => ({
+                    posts: prev.posts.map(post => (post.id === id ? res.data : post)),
+                    editingPostId: null,
+                    editPostTitle: '',
+                    editPostBody: '',
+                    editPostSlug: '',
+                }));
+            })
+            .catch(err => {
+                console.error('Update post error:', err.response?.data || err.message);
+            });
+    };
+
+    render() {
+        const {
+            details,
+            posts, editingPostId,
+            editPostTitle, editPostBody, editPostSlug,
+            newPostTitle, newPostBody, newPostSlug, newPostBanner, newPostAuthor
+        } = this.state;
+
+        return (
+
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
+                <header>Data from django</header>
+                <hr />
+
+                <h3>Add Post</h3>
+                <div style={{ marginBottom: '30px', padding: '15px', border: '2px solid #28a745', borderRadius: '5px' }}>
+                    <h3>Lägg till nytt inlägg</h3>
+                    <form onSubmit={this.handleCreatePost}>
+                        <div style={{ marginBottom: '10px' }}>
+                            <input
+                                aria-label="title"
+                                type="text"
+                                placeholder="Title"
+                                value={newPostTitle}
+                                onChange={(e) => this.setState({ newPostTitle: e.target.value })}
+                                required
+                                style={{ padding: '5px', width: '100%' }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '10px' }}>
+                            <textarea
+                                aria-label="body"
+                                placeholder="Body"
+                                value={newPostBody}
+                                onChange={(e) => this.setState({ newPostBody: e.target.value })}
+                                required
+                                rows={4}
+                                style={{ padding: '5px', width: '100%' }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '10px' }}>
+                            <input
+                                aria-label="slug"
+                                type="text"
+                                placeholder="Slug"
+                                value={newPostSlug}
+                                onChange={(e) => this.setState({ newPostSlug: e.target.value })}
+                                style={{ padding: '5px', width: '100%' }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '10px' }}>
+                            <input
+                                aria-label="banner"
+                                type="text"
+                                placeholder="Banner (URL or path)"
+                                value={newPostBanner}
+                                onChange={(e) => this.setState({ newPostBanner: e.target.value })}
+                                style={{ padding: '5px', width: '100%' }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '10px' }}>
+                            <select
+                                aria-label="author"
+                                value={newPostAuthor}
+                                onChange={(e) => this.setState({ newPostAuthor: e.target.value })}
+                                required
+                                style={{ padding: '5px', width: '100%' }}
+                            >
+                                <option value="">-- Select Author --</option>
+                                {details.map(user => (
+                                    <option key={user.id} value={user.username}>{user.username}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <button aria-label="Skapa inlägg" type="submit" style={{ padding: '7px 15px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}>
+                            Skapa inlägg
+                        </button>
+                    </form>
+                </div>
+
+                <h3>Posts</h3>
+                {Array.isArray(posts) ? (
+                    posts.map((post) => (
+                        <div key={post.id} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ccc' }}>
+                            {editingPostId === post.id ? (
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={editPostTitle}
+                                        onChange={(e) => this.setState({ editPostTitle: e.target.value })}
+                                        style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+                                    />
+                                    <textarea
+                                        value={editPostBody}
+                                        onChange={(e) => this.setState({ editPostBody: e.target.value })}
+                                        rows={4}
+                                        style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={editPostSlug}
+                                        onChange={(e) => this.setState({ editPostSlug: e.target.value })}
+                                        style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+                                    />
+
+                                    <button onClick={() => this.handleUpdatePost(post.id)}>Spara</button>
+                                    <button onClick={() => this.setState({ editingPostId: null })} style={{ marginLeft: '10px' }}>
+                                        Avbryt
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <h2>{post.title}</h2>
+                                    <p><strong>Body:</strong> {post.body}</p>
+                                    <p><strong>Slug:</strong> {post.slug}</p>
+                                    <p><strong>Date created:</strong> {post.date_created}</p>
+                                    <p><strong>Banner:</strong> {post.banner}</p>
+                                    <p><strong>Author:</strong> {post.author}</p>
+
+                                    <button onClick={() => this.startEditPost(post)}>Redigera</button>
+                                    <button aria-label="Ta bort Post" onClick={() => this.handleDeletePost(post.id)} style={{ marginLeft: '10px', color: 'red' }}>
+                                        Ta bort Post
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    <p>Ingen postdata tillgänglig eller felaktigt format.</p>
+                )}
+            </div>
+        );
+    }
+}
+
+export default App;

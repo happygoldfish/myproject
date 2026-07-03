@@ -2,6 +2,7 @@ const { createBdd } = require('playwright-bdd');
 const { Given, When, Then } = createBdd();
 const { expect } = require('@playwright/test');
 
+
 Given('I enter the title {string}', async ({ page }, title) => {
   await page.getByLabel(/title/i).fill(title);
 });
@@ -23,5 +24,5 @@ Given('I select the author {string} from the dropdown', async ({ page }, author)
 });
 
 Then('I should see the post title heading {string}', async ({ page }, title) => {
-  await expect(page.getByRole('heading', { name: title })).toBeVisible();
+  await expect(page.getByRole('heading', { name: title }).first()).toBeVisible();
 });

@@ -18,10 +18,12 @@ from comment.models import Comment
 from comment.forms import CommentForm
 from .serializer import PostSerializer
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 # Create your views here.
 class PostView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True, context={"request": request})
@@ -34,6 +36,8 @@ class PostView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)  
 
 class PostDetailView(APIView):
+    permission_classes = [AllowAny]
+
     def get_object(self, pk):
         return get_object_or_404(Post, pk=pk)
 

@@ -1,7 +1,7 @@
 Feature: User Registration
 
     Scenario: Register a new user with valid details
-        Given I open the homepage "http://localhost:3000/"
+        Given I open the user page "http://localhost:3000/users"
         And I enter the username "newuser"
         And I enter the email "New@mail.org"
         And I enter the password "NewUser123!"

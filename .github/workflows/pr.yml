@@ -44,6 +44,21 @@ jobs:
                 PYTHONUNBUFFERED: 1
               run: |
                 pytest -v
+            
+            - name: Set up environment for postman tests
+              run: |
+                npm install -g postman-cli
+            
+            - name: Starting Django backend server
+              run: |
+                python manage.py runserver 0.0.0.0:8000&
+                #wait for software to start
+                sleep 5
+            
+            - name: Run postman tests 
+              run: |
+                postman collection run "postman/collections/api"
+                #postman collection run 
 
             - name: Install npm & Playwright
               run: |
@@ -54,7 +69,7 @@ jobs:
                 PYTHONDONOTWRITEBYTECODE: 1
                 PYTHONUNBUFFERED: 1
               run: |
-                python manage.py runserver 0.0.0.0:8000 &
+                
                 cd frontend
                 npm install
                 npm install --save-dev @cucumber/cucumber
@@ -66,11 +81,4 @@ jobs:
                 cd ..
                 npx playwright test
 
-            - name: Set up environment for postman tests
-              run: |
-                npm install -g postman-cli
             
-            - name: Run postman tests 
-              run: |
-                postman collection run "postman/collections/api"
-                #postman collection run 

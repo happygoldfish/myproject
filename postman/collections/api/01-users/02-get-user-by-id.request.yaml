@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/users/api/{{userId}}?format=json"
+url: "{{baseUrl}}/react/users/{{userId}}/"
 method: GET
 scripts:
   - type: afterResponse

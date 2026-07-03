@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/posts/api/{{postId}}"
+url: "{{baseUrl}}/react/posts/{{postId}}/"
 method: DELETE
 scripts:
   - type: afterResponse

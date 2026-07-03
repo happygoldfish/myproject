@@ -130,3 +130,9 @@ def test_update_post_with_instance_save(db, post_entry):
     updated = Post.objects.get(pk=post_entry.pk)
     assert updated.title == "Saved title"
     assert updated.body == "Saved body"
+
+def test_delete_post(db, post_entry):
+    pk = post_entry.pk
+    post_entry.delete()
+
+    assert Post.objects.filter(pk=pk).count() == 0

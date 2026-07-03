@@ -6,6 +6,14 @@ Given('I open the homepage {string}', async ({ page }, url) => {
   await page.goto(url);
 });
 
+Given('I open the user page {string}', async ({ page }, arg) => {
+  await page.goto(arg);
+});
+
+Given('I open the post page {string}', async ({ page }, url) => {
+  await page.goto(url);
+});
+
 When('I click the button {string}', async ({ page }, buttonText) => {
   const btn = page.getByRole('button', { name: buttonText });
   await expect(btn.first()).toBeVisible({ timeout: 15000 });
