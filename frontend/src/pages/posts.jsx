@@ -246,7 +246,12 @@ class App extends React.Component {
                                     <p><strong>Body:</strong> {post.body}</p>
                                     <p><strong>Slug:</strong> {post.slug}</p>
                                     <p><strong>Date created:</strong> {post.date_created}</p>
-                                    <p><strong>Banner:</strong> {post.banner}</p>
+                                    {post.banner && (
+                                        <p>
+                                            <strong>Banner:</strong><br />
+                                            <img src={post.banner} alt={`Banner för ${post.title}`} style={{ maxWidth: '100%', maxHeight: '300px', height: 'auto' }} />
+                                        </p>
+                                    )}
                                     <p><strong>Author:</strong> {post.author}</p>
 
                                     <button onClick={() => this.startEditPost(post)}>Redigera</button>
