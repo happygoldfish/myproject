@@ -225,3 +225,6 @@ test-results/.last-run.json
 #playwright
 playwright-report/
 playwright-report/*
+
+#playwright-bdd generated specs (regenerated from e2e/ui/features + steps)
+.features-gen/

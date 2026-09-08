@@ -79,6 +79,7 @@ jobs:
                 #run tests
                 #npm test
                 cd ..
+                npm run bdd:gen
                 npx playwright test
 
             

@@ -1,6 +1,5 @@
 import axios from '../api';
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 class App extends React.Component {
     state = {
@@ -194,7 +193,7 @@ class App extends React.Component {
         const {
             details, posts, editingPostId,
             editPostTitle, editPostBody, editPostSlug, editPostBanner, editPostBannerFile,
-            newPostTitle, newPostBody, newPostSlug, newPostBanner, newPostBannerFile,
+            newPostTitle, newPostBody, newPostSlug, newPostBannerFile,
             currentUser, loginUsername, loginPassword, loginError
         } = this.state;
 
