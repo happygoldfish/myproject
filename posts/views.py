@@ -22,7 +22,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 # Create your views here.
 class PostView(APIView):
-    permission_classes = [AllowAny]
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
     def get(self, request):
         posts = Post.objects.all()
@@ -30,13 +33,19 @@ class PostView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = PostSerializer(data=request.data, context={"request": request})
+        data = request.data.copy()
+        # Force the author to the logged-in user; never trust a client-supplied author
+        data['author'] = request.user.username
+        serializer = PostSerializer(data=data, context={"request": request})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)  
 
 class PostDetailView(APIView):
-    permission_classes = [AllowAny]
+    def get_permissions(self):
+        if self.request.method in ('PUT', 'DELETE'):
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
     def get_object(self, pk):
         return get_object_or_404(Post, pk=pk)
@@ -48,7 +57,9 @@ class PostDetailView(APIView):
 
     def put(self, request, pk):
         objekt = self.get_object(pk)
-        serializer = PostSerializer(objekt, data=request.data, partial=True)
+        if objekt.author != request.user:
+            return Response({"detail": "Du kan bara redigera dina egna inlägg."}, status=status.HTTP_403_FORBIDDEN)
+        serializer = PostSerializer(objekt, data=request.data, partial=True, context={"request": request})
         
         if serializer.is_valid():
             serializer.save()
@@ -57,6 +68,8 @@ class PostDetailView(APIView):
 
     def delete(self, request, pk):
         objekt = self.get_object(pk)
+        if objekt.author != request.user:
+            return Response({"detail": "Du kan bara ta bort dina egna inlägg."}, status=status.HTTP_403_FORBIDDEN)
         objekt.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

@@ -15,7 +15,7 @@ from django.views import generic
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db import transaction
 from django.db import IntegrityError
 from django.db.models.deletion import ProtectedError
@@ -27,35 +27,35 @@ class UserView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        output = [{"id": output.id,
-                   "username": output.username,
-                   "email": output.email,
-                   "first_name": output.first_name,
-                   "last_name": output.last_name,
-                   "password": output.password,}
-                   for output in User.objects.all()]
-        return Response(output)
+        users = User.objects.select_related('profile').all()
+        serializer = UserSerializer(users, many=True, context={"request": request})
+        return Response(serializer.data)
     
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data, context={"request": request})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
 
 class UserDetailView(APIView):
-    permission_classes = [AllowAny]
+    def get_permissions(self):
+        if self.request.method in ('PUT', 'DELETE'):
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
     def get_object(self, pk):
         return get_object_or_404(User, pk=pk)
 
     def get(self, request, pk):
         objekt = self.get_object(pk)
-        serializer = UserSerializer(objekt)
+        serializer = UserSerializer(objekt, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         objekt = self.get_object(pk)
-        serializer = UserSerializer(objekt, data=request.data)
+        if objekt != request.user:
+            return Response({"detail": "Du kan bara redigera ditt eget konto."}, status=status.HTTP_403_FORBIDDEN)
+        serializer = UserSerializer(objekt, data=request.data, context={"request": request})
         
         if serializer.is_valid():
             serializer.save()
@@ -64,6 +64,8 @@ class UserDetailView(APIView):
 
     def delete(self, request, pk):
         objekt = self.get_object(pk)
+        if objekt != request.user and not request.user.is_staff:
+            return Response({"detail": "Du kan bara ta bort ditt eget konto."}, status=status.HTTP_403_FORBIDDEN)
         try:
             with transaction.atomic():
                 # Explicitly remove profile first to avoid relation edge-cases.
@@ -81,6 +83,47 @@ class UserDetailView(APIView):
 class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+# -------------------
+# React session-auth API (login/logout/whoami)
+# -------------------
+class ReactCSRFView(APIView):
+    """GET this once on app load to make Django set the csrftoken cookie."""
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        from django.middleware.csrf import get_token
+        get_token(request)
+        return Response({"detail": "CSRF cookie set"})
+
+class ReactSessionView(APIView):
+    """Returns the currently logged-in user, or null if not authenticated."""
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return Response(UserSerializer(request.user, context={"request": request}).data)
+        return Response({"detail": "Not authenticated"}, status=status.HTTP_200_OK)
+
+class ReactLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        login(request, user)
+        return Response(UserSerializer(user, context={"request": request}).data)
+
+class ReactLogoutView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        logout(request)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 #Views for django UI

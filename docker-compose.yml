@@ -3,15 +3,15 @@ services:
     image: postgres:16
     restart: unless-stopped
     environment:
-      POSTGRES_DB: myproject
-      POSTGRES_USER: myproject
-      POSTGRES_PASSWORD: myproject
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U myproject -d myproject" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -24,9 +24,9 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: "5432"
-      DB_NAME: myproject
-      DB_USER: myproject
-      DB_PASSWORD: myproject
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - media_data:/app/media
     ports:
