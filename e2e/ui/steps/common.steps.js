@@ -20,6 +20,12 @@ When('I click the button {string}', async ({ page }, buttonText) => {
   await btn.first().click();
 });
 
+Given('I log in with username {string} and password {string}', async ({ page }, username, password) => {
+  await page.getByLabel('login-username', { exact: true }).fill(username);
+  await page.getByLabel('login-password', { exact: true }).fill(password);
+  await page.getByRole('button', { name: 'Logga in' }).click();
+});
+
 Then('I should see the text {string}', async ({ page }, text) => {
   await expect(page.getByText(text)).toBeVisible();
 });

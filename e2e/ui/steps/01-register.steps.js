@@ -6,7 +6,7 @@ const { expect } = require('@playwright/test');
 
 
 Given('I enter the username {string}', async ({ page }, username) => {
-  await page.getByLabel(/username/i).fill(username);
+  await page.getByLabel('username', { exact: true }).fill(username);
 });
 
 Given('I enter the email {string}', async ({ page }, email) => {
@@ -14,7 +14,7 @@ Given('I enter the email {string}', async ({ page }, email) => {
 });
 
 Given('I enter the password {string}', async ({ page }, password) => {
-  await page.getByLabel(/password/i).fill(password);
+  await page.getByLabel('password', { exact: true }).fill(password);
 });
 
 Given('att jag öppnar sidan {string}', async ({ page }, url) => {
