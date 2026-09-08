@@ -3,6 +3,7 @@ url: "{{baseUrl}}/react/posts/"
 method: POST
 headers:
   Content-Type: application/json
+  X-CSRFToken: "{{csrfToken}}"
 body:
   type: json
   content: |-

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.conf import settings
+from django.contrib.auth import update_session_auth_hash
 from .models import User, Profile
 from rest_framework.response import Response
 import os
@@ -73,6 +74,11 @@ class UserSerializer(serializers.ModelSerializer):
         if password:
             user.set_password(password)
             user.save()
+            # Changing the password invalidates Django's session auth hash;
+            # without this the caller would be silently logged out.
+            request = self.context.get('request')
+            if request:
+                update_session_auth_hash(request, user)
         self._apply_profile(user)
         return user
 

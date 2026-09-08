@@ -1,6 +1,8 @@
 $kind: http-request
 url: "{{baseUrl}}/react/posts/{{postId}}/"
 method: DELETE
+headers:
+  X-CSRFToken: "{{csrfToken}}"
 scripts:
   - type: afterResponse
     code: |-

@@ -27,3 +27,5 @@ variables:
     value: "ChangeMe123!"
   - key: updatedUserEmail
     value: "updateduser@example.com"
+  - key: csrfToken
+    value: ""

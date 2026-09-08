@@ -1,6 +1,6 @@
 $kind: http-request
-url: "{{baseUrl}}/react/users/{{userId}}/"
-method: PUT
+url: "{{baseUrl}}/react/login/"
+method: POST
 headers:
   Content-Type: application/json
   X-CSRFToken: "{{csrfToken}}"
@@ -8,11 +8,8 @@ body:
   type: json
   content: |-
     {
-      "username": "{{updatedUser}}",
-      "first_name": "{{updatedUserName}}",
-      "last_name": "{{updatedUserLName}}",
-      "email": "{{updatedUserEmail}}",
-      "password": "{{updatedUserPass}}"
+      "username": "{{newUser}}",
+      "password": "{{newUserPass}}"
     }
 scripts:
   - type: afterResponse
@@ -27,8 +24,12 @@ scripts:
 
       const data = pm.response.json();
 
-      pm.test('Response is an object', function () {
-        pm.expect(data).to.be.an('object');
+      pm.test('Response has username', function () {
+        pm.expect(data).to.have.property('username');
       });
+
+      // Login rotates the CSRF token, refresh the stored value
+      const csrfToken = pm.cookies.get('csrftoken');
+      pm.collectionVariables.set('csrfToken', csrfToken);
     language: text/javascript
-order: 5000
+order: 1200
